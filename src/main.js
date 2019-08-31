@@ -22,7 +22,8 @@ import base from '@/module-manage/' // 用户管理
 // import form from '@/module-form/' // 表单页
 // import details from '@/module-details/' // 表单页
 import hmmm from '@/module-hmmm/' // 黑马面面
-
+import Component from '@/components/Home' // 全局组件
+Vue.use(Component)
 Vue.use(dashboard, store)
 Vue.use(base, store)
 // Vue.use(list, store)
