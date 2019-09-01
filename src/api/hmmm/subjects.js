@@ -6,7 +6,6 @@
  *
  * 学科
  */
-
 import { createAPI } from '@/utils/request'
 
 // 学科列表

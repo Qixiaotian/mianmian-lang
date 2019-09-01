@@ -11,8 +11,12 @@ import { asyncRouterMap } from '@/router'
 import routerMaps from './router'
 // vuex
 // import app from './store/app'
-
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import { quillEditor } from 'vue-quill-editor'
 export default {
+  
   install(module, store) {
     // 注册路由
     for (const iterator of routerMaps) {
@@ -23,5 +27,6 @@ export default {
     if (store !== undefined) {
       // store.registerModule('app', app)
     }
+    module.component('quill-editor', quillEditor)
   }
 }
