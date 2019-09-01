@@ -13,6 +13,7 @@ import * as filters from './filters' // global filters
 import './mock' // simulation data
 // font-awesome
 import 'font-awesome/css/font-awesome.css'
+
 /*
  * 注册 - 业务模块
  */
@@ -21,9 +22,13 @@ import base from '@/module-manage/' // 用户管理
 // import list from '@/module-list/' // 列表页
 // import form from '@/module-form/' // 表单页
 // import details from '@/module-details/' // 表单页
+
 import hmmm from '@/module-hmmm/' // 黑马面面
 import Component from '@/components/Home' // 全局组件
 Vue.use(Component)
+
+ // 黑马面面
+
 Vue.use(dashboard, store)
 Vue.use(base, store)
 // Vue.use(list, store)
