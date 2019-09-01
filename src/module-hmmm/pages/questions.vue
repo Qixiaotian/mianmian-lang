@@ -19,7 +19,6 @@
           <el-col :span="6">
             <el-form-item label="难度" label-width="68px" prop="difficulty">
               <el-select
-                @change="questionChange"
                 style="width:280px;height:36px"
                 placeholder="请选择"
                 v-model="formData.difficulty"
@@ -36,7 +35,6 @@
           <el-col :span="6">
             <el-form-item label="试题类型" label-width="68px" prop="questionType">
               <el-select
-                @change="questionChange"
                 style="width:280px;height:36px"
                 placeholder="请选择"
                 v-model="formData.questionType"
@@ -70,7 +68,6 @@
           <el-col :span="6">
             <el-form-item label="方向" label-width="68px" prop="direction">
               <el-select
-                @change="questionChange"
                 style="width:280px;height:36px"
                 placeholder="请输入题目编号/题干"
                 v-model="formData.direction"
@@ -82,7 +79,6 @@
           <el-col :span="6">
             <el-form-item label="关键字" label-width="68px" prop="keyword">
               <el-input
-                @change="questionChange"
                 v-model="formData.keyword"
                 placeholder="请选择"
                 style="width:280px;height:36px"
@@ -92,7 +88,6 @@
           <el-col :span="6">
             <el-form-item label="题目备注" label-width="68px" prop="remarks">
               <el-input
-                @change="questionChange"
                 v-model="formData.remarks"
                 placeholder="请输入"
                 style="width:280px;height:36px"
@@ -102,7 +97,6 @@
           <el-col :span="6">
             <el-form-item label="二级目录" label-width="68px" prop="catalogID">
               <el-select
-                @change="questionChange"
                 style="width:280px;height:36px"
                 placeholder="请选择二级目录"
                 v-model="formData.catalogID"
@@ -121,7 +115,6 @@
           <el-col :span="6">
             <el-form-item label="录入人" label-width="68px" prop="creatorID">
               <el-input
-                @change="questionChange"
                 v-model="formData.creatorID"
                 style="width:280px;height:36px"
                 placeholder="请输入"
@@ -160,31 +153,43 @@
         <el-table-column prop="id" label="序号" width="120" align="center"></el-table-column>
         <el-table-column prop="number" label="试题编号" width="220" align="center"></el-table-column>
         <el-table-column prop="subject" label="学科" align="center"></el-table-column>
-        <el-table-column prop="questionType" label="题型" align="center" width="120"></el-table-column>
+        <el-table-column
+          :formatter="questionModel"
+          prop="questionType"
+          label="题型"
+          align="center"
+          width="120"
+        ></el-table-column>
         <el-table-column prop="question" label="题干" align="center"></el-table-column>
         <el-table-column label="录入时间" width="240" align="center">
           <template slot-scope="scope">{{ scope.row.addDate | parseTimeByString}}</template>
         </el-table-column>
-        <el-table-column prop="difficulty" label="难度" align="center"></el-table-column>
+        <el-table-column :formatter="difficulty" prop="difficulty" label="难度" align="center"></el-table-column>
         <el-table-column prop="creator" label="录入人" align="center"></el-table-column>
         <el-table-column prop="address" label="使用次数" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="obj">
-            <el-dropdown trigger="click" @command='calssified'>
-            <el-link type="primary">预览</el-link>
+            <el-dropdown trigger="click" @command="calssified">
+              <el-link type="primary">预览</el-link>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command='single'>单选</el-dropdown-item>
-                <el-dropdown-item command='multiple'>多选</el-dropdown-item>
-                <el-dropdown-item command='short'>简答</el-dropdown-item>
+                <el-dropdown-item command="single">单选</el-dropdown-item>
+                <el-dropdown-item command="multiple">多选</el-dropdown-item>
+                <el-dropdown-item command="short">简答</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-link type="primary" @click="startOrStop(obj.row)">禁用</el-link>
+            <el-link type="primary">禁用</el-link>
             <el-link type="primary" @click="delQuestion(obj.row)">删除</el-link>
             <el-link type="primary">下架</el-link>
           </template>
         </el-table-column>
       </el-table>
-            <classify-box :dialogVisible='dialogVisible'></classify-box>      
+      <el-dialog :visible.sync="dialogVisible" width="50%">
+        <classify-box :dialogVisible="dialogVisible"></classify-box>
+        <span slot="footer" class="dialog-footer" style="margin-top:-200px">
+          <el-button @click="dialogVisible = false">关闭</el-button>
+        </span>
+      </el-dialog>
+
       <el-row style="margin:40px 0">
         <el-pagination
           :page-size="page.pagesize"
@@ -254,16 +259,20 @@ export default {
         this.dialogVisible = true
       }
     },
-    // 启动或者禁用
-    async startOrStop(obj) {
-      // await this.$confirm('您确定要吗?')
-      console.log(obj)
+    // 难度过滤
+    difficulty(row, column, cellValue, index) {
+      var obj = difficulty.find(
+        item => Number(item.value) === Number(cellValue)
+      )
+      return obj.label
     },
-    // 内容改变时
-    questionChange(value) {
-      // console.log(value)
+    // 题型过滤
+    questionModel(row, column, cellValue, index) {
+      var obj = questionType.find(item => {
+        return Number(item.value) === Number(cellValue)
+      })
+      return obj.label
     },
-
     // 删除
     async delQuestion(obj) {
       await this.$confirm('您确定要删除吗')
@@ -308,6 +317,8 @@ export default {
 
     // 重置
     resetForm() {
+      this.formData.province = ''
+      this.formData.city = ''
       this.$refs.myForm.resetFields()
     },
 

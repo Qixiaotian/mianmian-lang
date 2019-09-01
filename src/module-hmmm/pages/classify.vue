@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" width="50%">
+  <div>
     <div slot="title">题目预览</div>
     <el-form v-model="formData">
       <el-form-item>
@@ -75,10 +75,8 @@
         <p style="margin:0">对效果图进行高仿，通过本题重点了解学生对代码阶段所学知识的综合应用</p>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer" style="margin-top:-200px">
-      <el-button @click="dialogVisible = false">关闭</el-button>
-    </span>
-  </el-dialog>
+  
+  </div>
 </template>
 
 <script>
@@ -112,7 +110,7 @@ export default {
 
 <style>
 .el-dialog__header {
-  background-color: #fff !important;
+  background-color: #fff;
   text-align: left;
 }
 .el-dialog__body {
